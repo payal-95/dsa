@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <cstdio>
 using namespace std;
+
 class record
 {
 private:
@@ -24,11 +25,12 @@ public:
     void srch(int s);
     void disOut();
 };
+
 void record::disOut()
 {
-    cout << "\n"
-         << roll << "\t" << name << "\t" << contact;
+    cout << "\n" << roll << "\t" << name << "\t" << contact;
 }
+
 void record::userIn()
 {
     cout << "\nEnter roll No. of student: ";
@@ -38,21 +40,20 @@ void record::userIn()
     cout << "Enter contact number: ";
     cin >> contact;
 }
+
 void record::fileWrt(int n)
 {
     fstream out;
-    out.open("RECORD.DAT", ios::binary | ios::app | ios::out |
-                               ios::in);
+    out.open("RECORD.DAT", ios::binary | ios::app | ios::out | ios::in);
     record obj;
     for (int i = 0; i < n; i++)
     {
         obj.userIn();
         out.write(reinterpret_cast<char *>(&obj), sizeof(obj));
-        
-
     }
     out.close();
 }
+
 void record::disFile()
 {
     ifstream in;
@@ -68,6 +69,7 @@ void record::disFile()
     }
     in.close();
 }
+
 void record::srch(int s)
 {
     ifstream in;
@@ -87,6 +89,7 @@ void record::srch(int s)
     }
     in.close();
 }
+
 void record::filedlt(int s)
 {
     ifstream in;
@@ -100,17 +103,17 @@ void record::filedlt(int s)
     {
         if (obj.roll != s)
         {
-            out.write(reinterpret_cast<char *>(&obj),
-                      sizeof(obj));
+            out.write(reinterpret_cast<char *>(&obj), sizeof(obj));
         }
         in.read(reinterpret_cast<char *>(&obj), sizeof(obj));
     }
+    in.close();
+    out.close();
     remove("RECORD.DAT");
     rename("RECORD2.DAT", "RECORD.DAT");
-    out.close();
-    
-
+    cout << "\nRecord deleted successfully.";
 }
+
 void record::fileedit(int s)
 {
     fstream obj1, obj2;
@@ -123,19 +126,23 @@ void record::fileedit(int s)
     {
         if (r.roll == s)
         {
+            cout << "\nEnter new details:\n";
             r.userIn();
         }
         obj2.write(reinterpret_cast<char *>(&r), sizeof(r));
         obj1.read(reinterpret_cast<char *>(&r), sizeof(r));
     }
+    obj1.close();
+    obj2.close();
     remove("RECORD.DAT");
     rename("RECORD2.DAT", "RECORD.DAT");
-    obj2.close();
+    cout << "\nRecord updated successfully.";
 }
+
 int main()
 {
     int n;
-    cout << "Enter number of records to be created: ";
+    cout << "Enter the number of records to be created: ";
     cin >> n;
     record o;
     o.fileWrt(n);
@@ -143,10 +150,8 @@ int main()
     int slct;
     do
     {
-        cout << "\n#Menu:\n\t0.Display list\n\t1.+New Contact\n\t2.Search\n\t3.Delete\n\t4.Edit\n\t5.Exit " << endl;
-                
-        cout<< "Select-> ";
-             
+        cout << "\n#Menu:\n\t0. Display list\n\t1. Add New Contact\n\t2. Search\n\t3. Delete\n\t4. Edit\n\t5. Exit\n";
+        cout << "Select an option: ";
         cin >> slct;
         switch (slct)
         {
@@ -181,10 +186,9 @@ int main()
         }
         break;
         case 5:
-        {
             return 0;
-        }
         }
     } while (1);
     return 0;
 }
+
